@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Add Bootstrap CSS here -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Add Bootstrap JS here -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
+    <title>SOI</title>
+    <style>
+        .navbar-icons {
+            margin-right: 10px;
+            color: #efefef;
+        }
+
+        .navbar {
+            background-color: #efefef;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .card-body i {
+            margin-bottom: 10px;
+        }
+
+        .banner {
+            background-color: orange;
+            padding: 50px 0;
+        }
+
+        .baymax-img {
+            max-width: 100%;
+            height: auto;
+            max-height: 250px;
+            margin-bottom: 20px;
+        }
+
+        .card-container {
+            background-color: orange;
+            padding: 20px;
+        }
+
+        .card-container p {
+            font-size: 25px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .card {
+            max-width: 100%;
+        }
+
+        .row-cols-lg-4 {
+            justify-content: center;
+        }
+
+        .bookmark-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .bookmark-tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .avatar-online {
+            border-color: lightgreen;
+        }
+
+        .avatar-offline {
+            border-color: darkgrey;
+        }
+
+        .offcanvas-body {
+            max-height: 100%;
+            overflow-y: auto;
+        }
+
+        .offcanvas {
+            max-width: 300px;
+        }
+
+        .bookmarked-card {
+            max-width: 100%;
+        }
+
+        .ui-autocomplete {
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            position: absolute;
+            z-index: 1000;
+        }
+
+        .ui-autocomplete .ui-menu-item {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .ui-autocomplete .ui-menu-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">SOI Learning Portal</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggler">
+                <ul class="navbar-nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li class="nav-item"><a class="nav-link active" href="#">About</a></li>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="courseDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Courses
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="courseDropdown">
+                            <li><a class="dropdown-item" href="#">HTML</a></li>
+                            <li><a class="dropdown-item" href="#">CSS</a></li>
+                            <li><a class="dropdown-item" href="#">PHP</a></li>
+                            <li><a class="dropdown-item" href="#">JavaScript</a></li>
+                            <li><a class="dropdown-item" href="#">Python</a></li>
+                            <li><a class="dropdown-item" href="#">Java</a></li>
+                            <li><a class="dropdown-item" href="#">iOS</a></li>
+                            <li><a class="dropdown-item" href="#">React</a></li>
+                        </ul>
+                    </div>
+                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                    <!-- <input class="form-control" type="text" id="input" placeholder="Search"/> -->
+                    <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                        <input type="search" class="form-control" placeholder="Search..." aria-label="Search" id="input"
+                            autocomplete="off">
+                        <script src="tags.js"></script>
+                        <script>
+
+                        </script>
+                    </form>
+                </ul>
+
+                <div class="navbar-icons dropdown">
+                    <i class="bi bi-bell dropbtn-notif" onclick="myFunction()" id="notificationsDropdown" role="button"
+                        aria-expanded="false"></i>
+                    <ul class="dropdown-menu dropdown-content-notif" id="myDropdown-notif"
+                        aria-labelledby="notificationsDropdown">
+                        <li><a class="dropdown-item" href="#" id="msg1">Unread Message 1</a></li>
+                        <li><a class="dropdown-item" href="#">Unread Message 2</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">Read Message 1</a></li>
+                        <li><a class="dropdown-item" href="#">Read Message 2</a></li>
+                    </ul>
+                </div>
+
+                <script>
+                    function myFunction() {
+                        var dropdown = document.getElementById("myDropdown-notif");
+                        dropdown.classList.toggle("show");
+                        var msg1 = document.getElementById("msg1");
+                        if (msg1) {
+                            msg1.style.borderLeft = "4px solid blue";
+                        }
+                    }
+
+                    window.onclick = function (event) {
+                        if (!event.target.matches('.dropbtn-notif')) {
+                            var dropdowns = document.getElementsByClassName("dropdown-content-notif");
+                            var i;
+                            for (i = 0; i < dropdowns.length; i++) {
+                                var openDropdown = dropdowns[i];
+                                if (openDropdown.classList.contains('show')) {
+                                    openDropdown.classList.remove('show');
+                                }
+                            }
+                        }
+                    }
+
+                    var dropdown = new bootstrap.Dropdown(document.getElementById('notificationsDropdown'), {
+                        boundary: 'viewport'
+                    });
+                </script>
+
+                <div class="navbar-icons">
+                    <button class="loggedIn"><i class="bi bi-person"></i></i></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Banner Section -->
+    <div class="container-fluid banner">
+        <div class="container-lg">
+            <div class="row pt-5 d-flex align-items-center">
+                <div class="col-sm-7 pb-5">
+                    <h1>Welcome to SOI Learning Portal</h1>
+                    <p>Expertly crafted courses that best fit your learning needs and preferences.</p>
+                    <button type="button" class="btn btn-primary">Browse Courses</button>
+                    <button type="button" class="btn btn-primary">Be an Instructor</button>
+                </div>
+                <div class="col-sm-5 align-self-end text-center h-100">
+                    <img src="images/baymax.png" class="img-fluid baymax-img" alt="Baymax Image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Column Section -->
+    <div class="container-fluid">
+        <div class="mt-3 row d-flex justify-content-center">
+            <div class="col-lg-1 col-md-8"></div>
+            <div class="col-lg-3 col-md-8 d-flex justify-content-center mb-3">
+                <div class="row">
+                    <div class="col-2 justify-content-center my-auto">
+                        <i class="bi bi-journal"></i>
+                    </div>
+                    <div class="col-10">
+                        <small><b>158 online courses</b><br>Enjoy a variety of fresh topics</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-8 d-flex justify-content-center mb-3">
+                <div class="row">
+                    <div class="col-2 justify-content-center my-auto">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <div class="col-10">
+                        <small><b>Expert instruction</b><br>Find the right instructor for you</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-8 d-flex justify-content-center mb-3">
+                <div class="row">
+                    <div class="col-2 justify-content-center my-auto">
+                        <i class="bi bi-calendar"></i>
+                    </div>
+                    <div class="col-10">
+                        <small><b>Lifetime access</b><br>Learn on your schedule</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-1 col-md-8"> </div>
+        </div>
+    </div>
+    <br><br>
+
+    <!-- Card Section -->
+    <div id="cardCarousel" class="carousel slide card-container" data-bs-ride="carousel">
+        <p>Featured Courses</p>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="container mb-3">
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 justify-content-center">
+                        <!-- Card 1 -->
+                        <div class="col">
+                            <div class="card h-100 m-3" id="item1">
+                                <img src="images/html.png" class="card-img-top" alt="html">
+                                <div class="card-body">
+                                    <h5 class="card-title">Introduction to HTML and CSS</h5>
+                                    <i class="bi bi-clock-fill">2h 30m</i>
+                                    <a href="#" class="btn btn-primary mt-2">Learn more</a>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-person"></i> Hannah Lim
+                                    </div>
+                                    <button id="card1" class="border-0 float-end" onclick="bookmarkFunction()"
+                                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom">
+                                        <i class="bi bi-bookmark" title="Add to bookmarks" id="mark1"
+                                            data-bs-toggle="tooltip"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card 2 -->
+                        <div class="col">
+                            <div class="card h-100 m-3" id="item2">
+                                <img src="images/UI.png" class="card-img-top" alt="UI">
+                                <div class="card-body">
+                                    <h5 class="card-title">User Experience and Interface Design</h5>
+                                    <i class="bi bi-clock-fill">2h 45m</i>
+                                    <a href="#" class="btn btn-primary mt-2">Learn more</a>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-person"></i> Julia Lee
+                                    </div>
+                                    <button id="card2" class="border-0 float-end" onclick="bookmarkFunction()"
+                                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom">
+                                        <i class="bi bi-bookmark" title="Add to bookmarks" id="mark2"
+                                            data-bs-toggle="tooltip"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card 3 -->
+                        <div class="col">
+                            <div class="card h-100 m-3" id="item3">
+                                <img src="images/iOS.png" class="card-img-top" alt="iOS">
+                                <div class="card-body">
+                                    <h5 class="card-title">iOS App Development using Xcode and Swift</h5>
+                                    <i class="bi bi-clock-fill">4h 30m</i>
+                                    <a href="#" class="btn btn-primary mt-2">Learn more</a>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-person"></i> Ryan Low
+                                    </div>
+                                    <button id="card3" class="border-0 float-end" onclick="bookmarkFunction()"
+                                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom">
+                                        <i class="bi bi-bookmark" title="Add to bookmarks" id="mark3"
+                                            data-bs-toggle="tooltip"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card 4 -->
+                        <div class="col">
+                            <div class="card h-100 m-3" id="item4">
+                                <img src="images/js.jpg" class="card-img-top" alt="JS">
+                                <div class="card-body">
+                                    <h5 class="card-title">Front-end JavaScript Frameworks</h5>
+                                    <i class="bi bi-clock-fill">3h 45m</i>
+                                    <a href="#" class="btn btn-primary mt-2">Learn more</a>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-person"></i> Azhar Kamar
+                                    </div>
+                                    <button id="card4" class="border-0 float-end" onclick="bookmarkFunction()"
+                                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom">
+                                        <i class="bi bi-bookmark" title="Add to bookmarks" id="mark4"
+                                            data-bs-toggle="tooltip"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="container mb-3">
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 justify-content-center">
+                        <!-- Card 5 -->
+                        <div class="col">
+                            <div class="card h-100 m-3" id="item5">
+                                <img src="images/php.png" class="card-img-top" alt="PHP">
+                                <div class="card-body">
+                                    <h5 class="card-title">PHP</h5>
+                                    <i class="bi bi-clock-fill">1h 45m</i>
+                                    <a href="#" class="btn btn-primary mt-2">Learn more</a>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-person"></i> Hannah Lim
+                                    </div>
+                                    <button id="card5" class="border-0 float-end" onclick="bookmarkFunction()"
+                                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom">
+                                        <i class="bi bi-bookmark" title="Add to bookmarks" id="mark5"
+                                            data-bs-toggle="tooltip"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card 6 -->
+                        <div class="col">
+                            <div class="card h-100 m-3" id="item6">
+                                <img src="images/react.png" class="card-img-top" alt="React">
+                                <div class="card-body">
+                                    <h5 class="card-title">React</h5>
+                                    <i class="bi bi-clock-fill">2h 45m</i>
+                                    <a href="#" class="btn btn-primary mt-2">Learn more</a>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-person"></i> Julia Lee
+                                    </div>
+                                    <button id="card6" class="border-0 float-end" onclick="bookmarkFunction()"
+                                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom">
+                                        <i class="bi bi-bookmark" title="Add to bookmarks" id="mark6"
+                                            data-bs-toggle="tooltip"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card 7 -->
+                        <div class="col">
+                            <div class="card h-100 m-3" id="item7">
+                                <img src="images/python.png" class="card-img-top" alt="Python">
+                                <div class="card-body">
+                                    <h5 class="card-title">Python</h5>
+                                    <i class="bi bi-clock-fill">4h 30m</i>
+                                    <a href="#" class="btn btn-primary mt-2">Learn more</a>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-person"></i> Aisha Zain
+                                    </div>
+                                    <button id="card7" class="border-0 float-end" onclick="bookmarkFunction()"
+                                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom">
+                                        <i class="bi bi-bookmark" title="Add to bookmarks" id="mark7"
+                                            data-bs-toggle="tooltip"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card 8 -->
+                        <div class="col">
+                            <div class="card h-100 m-3" id="item8">
+                                <img src="images/android.png" class="card-img-top" alt="Android">
+                                <div class="card-body">
+                                    <h5 class="card-title">Android Programming</h5>
+                                    <i class="bi bi-clock-fill">3h 45m</i>
+                                    <a href="#" class="btn btn-primary mt-2">Learn more</a>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-person"></i> Andy Tao
+                                    </div>
+                                    <button id="card8" class="border-0 float-end" onclick="bookmarkFunction()"
+                                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom">
+                                        <i class="bi bi-bookmark" title="Add to bookmarks" id="mark8"
+                                            data-bs-toggle="tooltip"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#cardCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#cardCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <p class="col-md-4 mb-0 text-body-secondary">&copy; 2021 SOI Learning Portal. All Rights Reserved.</p>
+
+            <ul class="nav col-md-4 justify-content-end">
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Privacy</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Terms</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Feedback</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Support</a></li>
+            </ul>
+        </footer>
+    </div>
+
+    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasBottomLabel">Offcanvas bottom</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body small" id="canvas-content">
+            <div class="row">
+                <div col-2 id="bookmarks"></div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                var avatarOnline = true;
+                $('.loggedIn').click(function () {
+                    $(this).toggleClass('loggedOff');
+                    if (avatarOnline) {
+                        $(this).removeClass('avatar-online').addClass('avatar-offline');
+                    } else {
+                        $(this).removeClass('avatar-offline').addClass('avatar-online');
+                    }
+                    avatarOnline = !avatarOnline;
+                });
+
+
+                $('[data-bs-toggle="tooltip"]').tooltip();
+
+                function addBookmark(cardId) {
+                    var cardClone = $(`#${cardId}`).clone();
+                    cardClone.find('.card-footer button').remove();
+
+                    $("#bookmarks").empty().append(cardClone);
+
+
+                    $('#offcanvasBottom').offcanvas('show');
+                }
+                $("#mark1").click(function () {
+                    addBookmark("item1");
+                });
+                $("#mark2").click(function () {
+                    addBookmark("item2");
+                });
+                $("#mark3").click(function () {
+                    addBookmark("item3");
+                });
+                $("#mark4").click(function () {
+                    addBookmark("item4");
+                });
+                $("#mark5").click(function () {
+                    addBookmark("item5");
+                });
+                $("#mark6").click(function () {
+                    addBookmark("item6");
+                });
+                $("#mark7").click(function () {
+                    addBookmark("item7");
+                });
+                $("#mark8").click(function () {
+                    addBookmark("item8");
+                });
+
+                $(function () {
+                    var searchTags = [
+                        "HTML",
+                        "CSS",
+                        "PHP",
+                        "JavaScript",
+                        "Python",
+                        "Java",
+                        "iOS",
+                        "React",
+                        "Web Design",
+                        "Web Development",
+                        "Android"
+                    ];
+
+                    $("#input").autocomplete({
+                        source: searchTags
+
+                    });
+                });
+            });
+        </script>
+    </div>
+</body>
+
+</html>
